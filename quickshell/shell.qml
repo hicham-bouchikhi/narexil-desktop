@@ -16,6 +16,8 @@ ShellRoot {
     Dashboard {}
     EqOverlay {}
     CalendarOverlay {}
+    NotifPopups {}
+    NotifCenter {}
     Launcher {}
     ClipboardPicker {}
 }

@@ -7,7 +7,7 @@
 | **Hyprland** | Window manager (via UWSM) |
 | **Waybar** | Top bar — workspaces, tray, system modules |
 | **Eww** | On-demand floating dashboard panel |
-| **Mako** | Notifications |
+| **QuickShell** | Notifications (native DBus server) |
 | **Hypridle** | Idle daemon — DPMS + screen lock |
 | **Hyprlock** | Lock screen |
 | **Rofi** | App launcher, clipboard picker, power menu |
@@ -171,7 +171,6 @@ narexil-desktop/
 │   ├── eww.scss            # Styling
 │   └── scripts/            # Brightness daemon, toggle, media
 ├── rofi/                   # Theme + modes
-├── mako/                   # Notification config
 └── docs/
     └── design.md
 ```

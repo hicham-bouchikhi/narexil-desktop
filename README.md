@@ -1,7 +1,7 @@
 # narexil-desktop
 
 Hyprland desktop config for a 3-monitor CachyOS setup with NVIDIA GPU.
-Bar, launcher, clipboard picker, and dashboard are all handled by **QuickShell** (QML). Notifications via Mako, idle/lock via Hypridle/Hyprlock.
+Bar, launcher, clipboard picker, dashboard, and notifications are all handled by **QuickShell** (QML). Idle/lock via Hypridle/Hyprlock.
 
 ## Philosophy
 
@@ -20,7 +20,7 @@ The one exception: both **Kitty** (default) and **Konsole** are installed. Konso
 | **QuickShell launcher** | `SUPER+R` — app launcher with dedupe by id |
 | **QuickShell clipboard picker** | `SUPER+SHIFT+V` — cliphist-backed clipboard history |
 | **System tray** | Right-click any tray icon for its context menu (hover feedback) |
-| **Mako** | Notifications |
+| **QuickShell notifications** | Native DBus notification server + popup/center |
 | **Hypridle** | Idle daemon — lock at 10min, DPMS off at 15min |
 | **Hyprlock** | Lock screen with blurred screenshot, OLED-safe (solid black) |
 | **awww** | Per-monitor animated wallpaper daemon |
@@ -51,9 +51,6 @@ paru -S hyprland uwsm hypridle hyprlock
 
 # Shell (bar, launcher, dashboard, clipboard)
 paru -S quickshell
-
-# Notifications
-sudo pacman -S mako
 
 # Wallpaper + clipboard
 paru -S awww-git cliphist
