@@ -40,6 +40,11 @@ The one exception: both **Kitty** (default) and **Konsole** are installed. Konso
 
 ## Requirements
 
+All dependencies are handled by `install.sh` — see the [Setup](#setup) section below.
+
+<details>
+<summary>Full dependency list (manual reference)</summary>
+
 ```bash
 # Core
 paru -S hyprland uwsm hypridle hyprlock
@@ -54,45 +59,66 @@ sudo pacman -S wl-clipboard
 # Brightness (DDC/CI for external monitors)
 sudo pacman -S ddcutil
 
+# Audio
+sudo pacman -S pipewire wireplumber easyeffects playerctl
+
 # Script dependencies
-sudo pacman -S playerctl jq curl grimblast
+sudo pacman -S jq curl grimblast lm_sensors wf-recorder zbar libnotify
 
 # Fonts
 sudo pacman -S noto-fonts ttf-rubik
 paru -S ttf-material-symbols-variable-git
+
+# Desktop integration
+sudo pacman -S polkit-kde-agent kwalletmanager kwallet-pam
+sudo pacman -S xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-kde
 
 # Optional
 paru -S nordvpn-bin ollama
 ollama pull mistral-nemo   # for French correction
 ```
 
+</details>
+
 ---
 
 ## Setup
 
+### Automated (recommended)
+
 ```bash
 # 1. Clone
-git clone https://github.com/Esperadoce/narexil-desktop ~/Source/narexil-desktop
+git clone https://github.com/Esperadoce/narexil-desktop ~/sources/narexil-desktop
+cd ~/sources/narexil-desktop
 
-# 2. Symlink configs
-ln -sf ~/Source/narexil-desktop/quickshell ~/.config/quickshell
-
-# 3. Source hypr configs
-# Add to ~/.config/hypr/hyprland.conf:
-# source = ~/Source/narexil-desktop/hypr/autostart.conf
-# source = ~/Source/narexil-desktop/hypr/bind.conf
-# source = ~/Source/narexil-desktop/hypr/monitors.conf
-# source = ~/Source/narexil-desktop/hypr/rules.conf
-
-# 4. Make scripts executable
-chmod +x ~/Source/narexil-desktop/hypr/scripts/*
-
-# 5. Add wallpapers to ~/Pictures/Wallpapers/
-#    berserk.png → DP-1 | summer.jpeg → HDMI-A-2 | HDMI-A-1 uses solid black
-
-# 6. Start QuickShell
-quickshell &
+# 2. Run the installer
+bash install.sh
 ```
+
+`install.sh` will:
+- Install `paru` if not present
+- Install all required pacman and AUR packages (prompts for optional ones)
+- Symlink all configs into `~/.config/`:
+  - `quickshell/` → `~/.config/quickshell`
+  - `mako/`       → `~/.config/mako`
+  - `hypr/`       → `~/.config/hypr`
+  - `uwsm/`       → `~/.config/uwsm`
+- Make `hypr/scripts/*` executable
+- Create `~/Pictures/Wallpapers/`
+- Add your user to the `i2c` group for DDC/CI brightness control
+
+> Any existing config at a symlink target is backed up as `<name>.bak-<timestamp>` before being replaced.
+
+**After the installer finishes:**
+
+1. Log out and back in (or reboot) — required for `i2c` group membership to apply
+2. Add wallpapers to `~/Pictures/Wallpapers/`:
+   - `berserk.png`  → DP-1 (main monitor)
+   - `summer.jpeg`  → HDMI-A-2 (secondary monitor)
+   - HDMI-A-1 (OLED) uses solid black — no file needed
+3. Run `ddcutil detect` to verify brightness control bus numbers, then update `quickshell/services/Brightness.qml` if your buses differ
+4. Check `hypr/monitors.conf` matches your monitor names (`hyprctl monitors` once Hyprland starts)
+5. Start Hyprland via uwsm: `uwsm start hyprland`
 
 No build step — edit any QML file and run `pkill quickshell && quickshell &`, or for pure QML tweaks just `qs ipc call quickshell reload` where supported.
 
@@ -144,24 +170,30 @@ Find your monitor names with `hyprctl monitors`, then update:
 | `Super+Q` | Kitty terminal |
 | `Super+E` | Dolphin file manager |
 | `Super+B` | Vivaldi |
-| `Super+R` | QuickShell launcher |
+| `Super+Space` | QuickShell launcher |
 | `Super+Shift+V` | QuickShell clipboard picker |
 | `Super+Home` | QuickShell dashboard |
 | `Super+L` | Hyprlock |
 | `Super+X` | Kill active window |
 | `Super+Shift+X` | Force-kill active (SIGKILL by PID) |
-| `Super+V` | Toggle floating |
+| `Super+K` | Toggle the active window between floating and tiled |
 | `Super+F` | Fullscreen (hides bar) |
-| `Super+Shift+F` | Maximize (keeps bar/gaps) |
+| `Super+Shift+F` | Toggle fullscreen reported to the app, keeping normal window size |
 | `Super+S` | Toggle scratchpad |
 | `Super+Shift+S` | Move window to scratchpad |
 | `Super+Alt+F` | French text correction |
 | `Super+Z` | Zoom cycle (1× → 1.5× → 2.5× → 4×) |
 | `Super+Shift+Z` | Reset zoom |
+| `Super+Shift+Q` | Select a screen area, scan its QR code, and copy its contents |
+| `Super+R` | Start/stop a selected-area video recording (saved in `~/Videos`) |
 | `Print` | Screenshot full screen |
 | `Shift+Print` | Screenshot region |
 | `Super+Print` | Screenshot active window |
-| `XF86Tools` | Cider |
+| `XF86Tools` | Show/hide Cider on the current monitor |
+| `Super+F1` | Launch/show/hide Teams in its special workspace |
+| `Super+F2` | Launch/show/hide Discord in its special workspace |
+| `Super+G` | Show/hide the game special workspace on the current monitor |
+| `Super+Shift+G` | Toggle gaming gaps and rounding |
 
 IPC commands (scriptable):
 
