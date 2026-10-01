@@ -1,5 +1,4 @@
--- Generic floating position
-hl.window_rule({ match = { float = true }, center = true })
+-- Keep the default placement of floating windows and transient popups.
 
 -- Picture-in-Picture
 hl.window_rule({
@@ -13,7 +12,7 @@ hl.window_rule({
 
 -- Gaming
 local gamingApps = "^(steam_app.*|gamescope)$"
-local gamingWorkspace = "name:gaming"
+local gamingWorkspace = "special:gaming"
 
 hl.window_rule({ match = { content = "game" }, workspace = gamingWorkspace })
 hl.window_rule({ match = { class = gamingApps }, workspace = gamingWorkspace })
@@ -46,7 +45,15 @@ hl.window_rule({
 -- Apps
 hl.window_rule({ match = { class = "^(.*\\.exe)$", float = true }, monitor = PRIMARY_MONITOR, center = true, fullscreen_state = 0 })
 hl.window_rule({ match = { class = "^(.*[Ll]auncher.*)$" }, float = true, monitor = PRIMARY_MONITOR })
-hl.window_rule({ match = { class = "^(vesktop|discord)$" }, monitor = PRIMARY_MONITOR })
+hl.window_rule({
+    match          = { class = "^(Ankama Launcher)$", title = "^(Notification Manager)$" },
+    float          = true,
+    pin            = true,
+    no_focus       = true,
+    move           = "monitor_w-420 40",
+    size           = { "400", "120" },
+    suppress_event = "activate",
+})
 hl.window_rule({ match = { class = "^(.*[Cc]alc.*)$" }, float = true, size = { "max(monitor_w, monitor_h)*0.17", "min(monitor_w, monitor_h)*0.43" } })
 hl.window_rule({ match = { class = "^(org\\.kde\\.keditfiletype)$" }, float = true })
 hl.window_rule({ match = { class = "^(org\\.kde\\.ark)$" }, size = { "max(monitor_w, monitor_h)*0.40", "min(monitor_w, monitor_h)*0.40" } })
@@ -125,4 +132,12 @@ hl.window_rule({
         pin        = false,
     },
     no_focus = true,
+})
+
+
+
+hl.window_rule({
+    match = { class = "dev.noctalia.Noctalia" },
+    float = true,
+    size = { 1080, 920 },
 })

@@ -2,6 +2,7 @@
 ---- KEYBINDINGS ----
 ---------------------
 local localBinScript = os.getenv("HOME") .. "/.local/bin/"
+local hyprScript = os.getenv("HOME") .. "/.config/hypr/scripts/"
 local terminal    = "kitty"
 local fileManager = "dolphin"
 local browser     = "firefox"
@@ -10,10 +11,23 @@ local noctCall = "noctalia msg "
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + X", hl.dsp.window.close())
-hl.bind(mainMod .. " + ALT + Space", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + SHIFT + X", hl.dsp.window.kill())
+hl.bind(mainMod .. " + ALT + J", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + K", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))    -- dwindle only
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ action = "toggle" }))
-hl.bind(mainMod .. " + D", hl.dsp.window.fullscreen({ mode = 1 }))
+hl.bind(mainMod .. " + CONTROL + F", hl.dsp.window.fullscreen_state({ internal = 0, client = 2 }))
+-- Tell the app it is fullscreen while keeping its normal window geometry.
+hl.bind(mainMod .. " + SHIFT + F", function()
+    local window = hl.get_active_window()
+    if not window then return end
+    hl.dispatch(hl.dsp.window.fullscreen_state({
+        internal = 0,
+        client = window.fullscreen_client == 2 and 0 or 2,
+    }))
+end)
+hl.bind(mainMod .. " + ALT + F",     hl.dsp.window.fullscreen_state({ internal = 0, client = 0 }))
+-- hl.bind(mainMod .. " + D", hl.dsp.window.fullscreen({ mode = 1 }))
 hl.bind(mainMod .. " + M", hl.dsp.exit())
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
@@ -59,7 +73,7 @@ hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(localBinScript .. "ocr-region.sh"))
 -------------------
 
 -- Core binds
-hl.bind(mainMod .. " + R",          hl.dsp.exec_cmd(noctCall .. "panel-toggle launcher"))
+hl.bind(mainMod .. " + Space",      hl.dsp.exec_cmd(noctCall .. "panel-toggle launcher"))
 hl.bind(mainMod .. " + Home",       hl.dsp.exec_cmd(noctCall .. "panel-toggle control-center"))
 hl.bind(mainMod .. " + ALT + C",    hl.dsp.exec_cmd(noctCall .. "panel-toggle session"))
 hl.bind(mainMod .. " + W",          hl.dsp.exec_cmd(noctCall .. "panel-toggle wallpaper"))
@@ -94,14 +108,24 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(noctCall .. "brightness-down"),
 -- Screen Capture
 hl.bind(mainMod .. " + P",     hl.dsp.exec_cmd("hyprpicker -a"))
 hl.bind("Print",                hl.dsp.exec_cmd("sh -c 'grim -g \"$(slurp)\" - | wl-copy'"))
+hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exec_cmd(hyprScript .. "scan-qr-region.sh"))
+hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(hyprScript .. "record-region.sh"))
 hl.bind("CONTROL + Print",      hl.dsp.exec_cmd(noctCall .. "screenshot-region"))
 hl.bind(mainMod .. " + Print",              hl.dsp.exec_cmd("sh -c 'grim -o $(hyprctl monitors -j | jq -r \".[] | select(.focused == true) | .name\") - | wl-copy'"))
 hl.bind("CONTROL + " .. mainMod .. " + Print", hl.dsp.exec_cmd(noctCall .. "screenshot-fullscreen"))
 
 
--- -- Special button binds 
+-- Show/hide detected games on the current monitor.
+hl.bind(mainMod .. " + G", hl.dsp.workspace.toggle_special("gaming"))
+
+-- Gaming mode: toggle gaps on/off
+hl.bind(mainMod .. " + SHIFT + G", hl.dsp.exec_cmd(
+    "sh -c 'hyprctl getoption general:gaps_in | grep -q \"0 0 0 0\" && hyprctl eval \"hl.config({ general = { gaps_in = 3, gaps_out = 8 }, decoration = { rounding = 10 } })\" || hyprctl eval \"hl.config({ general = { gaps_in = 0, gaps_out = 0 }, decoration = { rounding = 0 } })\"'"
+))
+
+-- -- Special button binds
 hl.bind("XF86Calculator", hl.dsp.exec_cmd("kcalc"))
-hl.bind("XF86HomePage", hl.dsp.exec_cmd("discord"))
+require("app-scratchpads") -- Cider button, Super+F1 Teams, Super+F2 Discord
 hl.bind("XF86Explorer", hl.dsp.exec_cmd("code"))
 hl.bind("XF86Mail", hl.dsp.exec_cmd("thunderbird"))
 hl.bind("CONTROL + SHIFT + Escape", hl.dsp.exec_cmd(terminal .. " -e btop"))

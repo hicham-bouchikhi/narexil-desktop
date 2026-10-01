@@ -15,6 +15,9 @@ hl.config({
             inactive_border = CACHYGRAY,
         },
     },
+    dwindle = {
+        preserve_split = true,
+    },
     group = {
         col = {
             border_active = CACHYLBLUE,
@@ -44,4 +47,3 @@ hl.config({
         },
     },
 })
-

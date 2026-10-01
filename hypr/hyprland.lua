@@ -16,11 +16,12 @@
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 hl.monitor({
-    output   = "",
-    mode     = "preferred",
+    output   = "HDMI-A-1",
+    mode     = "5120x1440@144.00",
     position = "auto",
-    scale    = "auto",
+    scale    = "1",
 })
+
 
 require("animations")
 require("autostart") -- See autostart.lua for more  

@@ -63,7 +63,7 @@ sudo pacman -S ddcutil
 sudo pacman -S pipewire wireplumber easyeffects playerctl
 
 # Script dependencies
-sudo pacman -S jq curl grimblast lm_sensors
+sudo pacman -S jq curl grimblast lm_sensors wf-recorder zbar libnotify
 
 # Fonts
 sudo pacman -S noto-fonts ttf-rubik
@@ -170,24 +170,30 @@ Find your monitor names with `hyprctl monitors`, then update:
 | `Super+Q` | Kitty terminal |
 | `Super+E` | Dolphin file manager |
 | `Super+B` | Vivaldi |
-| `Super+R` | QuickShell launcher |
+| `Super+Space` | QuickShell launcher |
 | `Super+Shift+V` | QuickShell clipboard picker |
 | `Super+Home` | QuickShell dashboard |
 | `Super+L` | Hyprlock |
 | `Super+X` | Kill active window |
 | `Super+Shift+X` | Force-kill active (SIGKILL by PID) |
-| `Super+V` | Toggle floating |
+| `Super+K` | Toggle the active window between floating and tiled |
 | `Super+F` | Fullscreen (hides bar) |
-| `Super+Shift+F` | Maximize (keeps bar/gaps) |
+| `Super+Shift+F` | Toggle fullscreen reported to the app, keeping normal window size |
 | `Super+S` | Toggle scratchpad |
 | `Super+Shift+S` | Move window to scratchpad |
 | `Super+Alt+F` | French text correction |
 | `Super+Z` | Zoom cycle (1× → 1.5× → 2.5× → 4×) |
 | `Super+Shift+Z` | Reset zoom |
+| `Super+Shift+Q` | Select a screen area, scan its QR code, and copy its contents |
+| `Super+R` | Start/stop a selected-area video recording (saved in `~/Videos`) |
 | `Print` | Screenshot full screen |
 | `Shift+Print` | Screenshot region |
 | `Super+Print` | Screenshot active window |
-| `XF86Tools` | Cider |
+| `XF86Tools` | Show/hide Cider on the current monitor |
+| `Super+F1` | Launch/show/hide Teams in its special workspace |
+| `Super+F2` | Launch/show/hide Discord in its special workspace |
+| `Super+G` | Show/hide the game special workspace on the current monitor |
+| `Super+Shift+G` | Toggle gaming gaps and rounding |
 
 IPC commands (scriptable):
 

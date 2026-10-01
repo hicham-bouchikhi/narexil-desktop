@@ -60,7 +60,10 @@ install_packages() {
         easyeffects \
         bluez-utils \
         networkmanager \
-        grimblast
+        grimblast \
+        wf-recorder \
+        zbar \
+        libnotify
 
     info "Installing AUR packages via paru…"
     paru -S --needed --noconfirm \
