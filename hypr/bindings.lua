@@ -83,6 +83,7 @@ hl.bind(mainMod .. " + L",          hl.dsp.exec_cmd(noctCall .. "session lock"))
 hl.bind(mainMod .. " + comma",      hl.dsp.exec_cmd(noctCall .. "session logout"))
 hl.bind(mainMod .. " + V",          hl.dsp.exec_cmd(noctCall .. "panel-toggle clipboard"))
 hl.bind(mainMod .. " + A",          hl.dsp.exec_cmd(noctCall .. "panel-toggle control-center notifications"))
+hl.bind(mainMod .. " + PAUSE",      hl.dsp.exec_cmd(noctCall .. "panel-toggle michael-retunzew/hyprland-settings:panel"))
 
 
 -- Audio
@@ -117,6 +118,9 @@ hl.bind("CONTROL + " .. mainMod .. " + Print", hl.dsp.exec_cmd(noctCall .. "scre
 
 -- Show/hide detected games on the current monitor.
 hl.bind(mainMod .. " + G", hl.dsp.workspace.toggle_special("gaming"))
+
+-- Send the focused window to gaming without switching the current view.
+hl.bind(mainMod .. " + CONTROL + G", hl.dsp.window.move({ workspace = "special:gaming", follow = false }))
 
 -- Gaming mode: toggle gaps on/off
 hl.bind(mainMod .. " + SHIFT + G", hl.dsp.exec_cmd(

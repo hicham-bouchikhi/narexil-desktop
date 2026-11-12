@@ -5,6 +5,16 @@ local apps = {
     teams = { command = "teams-for-linux --gtk-version=3", classes = { ["teams-for-linux"] = true }, match = "^([Tt]eams-for-linux)$", keys = { "SUPER + F1" } },
     discord = { command = "discord", classes = { discord = true, vesktop = true }, match = "^([Dd]iscord|[Vv]esktop)$", keys = { "SUPER + F2", "XF86HomePage" } },
 }
+apps.vortex = {
+    command = "lutris lutris:rungameid/17",
+    classes = { steam_app_default = true, ["vortex.exe"] = true },
+    match = "^(steam_app_default|[Vv]ortex\\.exe)$",
+    initial_title = "^([Vv]ortex)(.*)$",
+    title_pattern = "^[Vv]ortex",
+    -- SUP + F3 deliberately unbound: it launched The Division 2 via Ubisoft Connect.
+    keys = {},
+}
+
 local launching = {}
 
 function M.toggle(name)
@@ -19,7 +29,8 @@ function M.toggle(name)
     -- Reuse existing windows, including ones opened before the config reload.
     local found = false
     for _, window in ipairs(hl.get_windows()) do
-        if window.mapped and app.classes[window.class:lower()] then
+        if window.mapped and app.classes[window.class:lower()]
+            and (not app.title_pattern or window.title:match(app.title_pattern)) then
             found = true
             if not window.workspace or window.workspace.name ~= workspace then
                 hl.dispatch(hl.dsp.window.move({ window = window, workspace = workspace, follow = false }))
@@ -41,7 +52,7 @@ end
 for name, app in pairs(apps) do
     hl.window_rule({
         name = "scratchpad-" .. name,
-        match = { class = app.match },
+        match = { class = app.match, initial_title = app.initial_title },
         workspace = "special:" .. name .. " silent",
     })
     for _, key in ipairs(app.keys) do

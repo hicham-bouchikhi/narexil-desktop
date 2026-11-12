@@ -42,9 +42,25 @@ hl.window_rule({
     workspace        = gamingWorkspace,
 })
 
+-- Vortex is a utility even though UMU gives it a Steam game class.
+hl.window_rule({
+    name = "vortex-utility-workspace",
+    match = {
+        class = "^(steam_app_default|[Vv]ortex\\.exe)$",
+        initial_title = "^([Vv]ortex)(.*)$",
+    },
+    workspace = "special:vortex silent",
+    content = "none",
+    decorate = true,
+    fullscreen_state = 0,
+})
+
 -- Apps
 hl.window_rule({ match = { class = "^(.*\\.exe)$", float = true }, monitor = PRIMARY_MONITOR, center = true, fullscreen_state = 0 })
-hl.window_rule({ match = { class = "^(.*[Ll]auncher.*)$" }, float = true, monitor = PRIMARY_MONITOR })
+-- Disabled: too broad — it also floated real app windows whose class merely contains
+-- "launcher" (e.g. "Ankama Launcher"), so they could not be tiled. Re-enable or narrow
+-- to an explicit allowlist if launcher splash/utility windows need floating.
+-- hl.window_rule({ match = { class = "^(.*[Ll]auncher.*)$" }, float = true, monitor = PRIMARY_MONITOR })
 hl.window_rule({
     match          = { class = "^(Ankama Launcher)$", title = "^(Notification Manager)$" },
     float          = true,

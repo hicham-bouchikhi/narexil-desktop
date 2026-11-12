@@ -34,3 +34,7 @@ require("permissions") -- See permissions.lua for more
 require("windowrules") -- See windowrules.lua for more
 require("workspaces") -- See workspaces.lua for more
 require("noctalia").apply_theme()
+
+-- Added by Hyprland Settings (Noctalia plugin): loads the file its panel writes.
+-- Move it up if a later block here must win over the panel.
+require("hyprland-settings")
